@@ -5,17 +5,20 @@ import br.com.wpb.leilao.model.Lance;
 import br.com.wpb.leilao.model.Leilao;
 import br.com.wpb.leilao.model.Pagamento;
 import br.com.wpb.leilao.model.Usuario;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.time.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(MockitoExtension.class)
 class GeradorDePagamentoTest {
 
+    @InjectMocks
     private GeradorDePagamento geradorDePagamento;
 
     @Mock
@@ -26,12 +29,6 @@ class GeradorDePagamentoTest {
 
     @Captor
     private ArgumentCaptor<Pagamento> captor;
-
-    @BeforeEach
-    public void beforeEach() {
-        MockitoAnnotations.initMocks(this);
-        this.geradorDePagamento = new GeradorDePagamento(pagamentoDao, clock);
-    }
 
     private Leilao leilao() {
         Leilao leilao = new Leilao("Monitor", new BigDecimal("1500"), new Usuario("Ricardo"));

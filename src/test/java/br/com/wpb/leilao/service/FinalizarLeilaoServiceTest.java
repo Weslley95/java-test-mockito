@@ -4,11 +4,12 @@ import br.com.wpb.leilao.dao.LeilaoDao;
 import br.com.wpb.leilao.model.Lance;
 import br.com.wpb.leilao.model.Leilao;
 import br.com.wpb.leilao.model.Usuario;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -16,8 +17,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(MockitoExtension.class)
 class FinalizarLeilaoServiceTest {
 
+    @InjectMocks
     private FinalizarLeilaoService finalizarLeilaoService;
 
     @Mock
@@ -25,12 +28,6 @@ class FinalizarLeilaoServiceTest {
 
     @Mock
     private EnviadorDeEmails enviadorDeEmails;
-
-    @BeforeEach
-    public void beforeEach() {
-        MockitoAnnotations.initMocks(this);
-        this.finalizarLeilaoService = new FinalizarLeilaoService(leilaoDao, enviadorDeEmails);
-    }
 
     private List<Leilao> leilaoList() {
         List<Leilao> list = new ArrayList<>();
