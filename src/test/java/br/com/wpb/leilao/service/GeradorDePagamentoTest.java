@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,13 +21,16 @@ class GeradorDePagamentoTest {
     @Mock
     private PagamentoDao pagamentoDao;
 
+    @Mock
+    Clock clock;
+
     @Captor
     private ArgumentCaptor<Pagamento> captor;
 
     @BeforeEach
     public void beforeEach() {
         MockitoAnnotations.initMocks(this);
-        this.geradorDePagamento = new GeradorDePagamento(pagamentoDao);
+        this.geradorDePagamento = new GeradorDePagamento(pagamentoDao, clock);
     }
 
     private Leilao leilao() {
@@ -43,6 +46,13 @@ class GeradorDePagamentoTest {
     void deveCriarPagamento() {
         Leilao l = leilao();
         Lance lanceVencedor = l.getLanceVencedor();
+        LocalDate data = LocalDate.of(2022, 06, 02);
+
+        Instant instant = data.atStartOfDay(ZoneId.systemDefault()).toInstant();
+
+        Mockito.when(clock.instant()).thenReturn(instant);
+        Mockito.when(clock.getZone()).thenReturn(ZoneId.systemDefault());
+
         geradorDePagamento.gerarPagamento(lanceVencedor);
 
         Mockito.verify(pagamentoDao).salvar(captor.capture());
