@@ -66,6 +66,19 @@ class FinalizarLeilaoServiceTest {
     @Test
     void deveEnviarEmailAoVencedorDoLance() {
         List<Leilao> leiloes = leilaoList();
+
+        Mockito.when(leilaoDao.buscarLeiloesExpirados()).thenReturn(leiloes);
+        Mockito.when(leilaoDao.salvar(Mockito.any())).thenThrow(RuntimeException.class);
+
+        try {
+            finalizarLeilaoService.finalizarLeiloesExpirados();
+            Mockito.verifyNoInteractions(enviadorDeEmails);
+        } catch (Exception ignored) {}
+    }
+
+    @Test
+    void deveEvitarEnvioDeEmailQuandoHouverErro() {
+        List<Leilao> leiloes = leilaoList();
         Mockito.when(leilaoDao.buscarLeiloesExpirados()).thenReturn(leiloes);
 
         finalizarLeilaoService.finalizarLeiloesExpirados();
@@ -74,6 +87,5 @@ class FinalizarLeilaoServiceTest {
         Lance lanceVencedor = leilao.getLanceVencedor();
 
         Mockito.verify(enviadorDeEmails).enviarEmailVencedorLeilao(lanceVencedor);
-
     }
 }
