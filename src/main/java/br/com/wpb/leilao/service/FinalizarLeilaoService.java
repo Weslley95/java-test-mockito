@@ -1,5 +1,6 @@
 package br.com.wpb.leilao.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.wpb.leilao.model.Lance;
@@ -30,7 +31,7 @@ public class FinalizarLeilaoService {
 	}
 
 	private Lance maiorLanceDadoNoLeilao(Leilao leilao) {
-		List<Lance> lancesDoLeilao = leilao.getLances();
+		List<Lance> lancesDoLeilao = new ArrayList<>(leilao.getLances());
 		lancesDoLeilao.sort((lance1, lance2) -> {
 			return lance2.getValor().compareTo(lance1.getValor());
 		});

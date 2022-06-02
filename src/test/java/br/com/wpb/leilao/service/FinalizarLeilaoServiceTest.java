@@ -4,6 +4,7 @@ import br.com.wpb.leilao.dao.LeilaoDao;
 import br.com.wpb.leilao.model.Lance;
 import br.com.wpb.leilao.model.Leilao;
 import br.com.wpb.leilao.model.Usuario;
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -47,7 +48,15 @@ class FinalizarLeilaoServiceTest {
 
     @Test
     void deveFinalizarUmLeilao() {
-        List<Leilao> leilaos = leilaoList();
+        List<Leilao> leiloes = leilaoList();
+
+        Mockito.when(leilaoDao.buscarLeiloesExpirados()).thenReturn(leiloes);
+
         finalizarLeilaoService.finalizarLeiloesExpirados();
+
+        Leilao leilao = leiloes.get(0);
+        Assert.assertTrue(leilao.isFechado());
+        Assert.assertEquals(new BigDecimal("1800"), leilao.getLanceVencedor().getValor());
+        Mockito.verify(leilaoDao).salvar(leilao);
     }
 }
